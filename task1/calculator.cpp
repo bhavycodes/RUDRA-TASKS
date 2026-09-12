@@ -1,5 +1,6 @@
 #include <iostream>
 using namespace std;
+
 float subtract(float a, float b){
     return a - b;
 }
@@ -12,9 +13,13 @@ float divide(float a, float b){
     return a / b;
 }
 
+float addition(float a, float b){
+    return a + b;
+}
 
-
-// MAKE THE CODE FOR ADDITION AND DIVISION AND THEN REMOVE THIS COMMENT LINE
+float multiplication(float a, float b){
+    return a * b;
+}
 
 
 int main()
@@ -35,16 +40,25 @@ int main()
     cin >> a >> b;
 
     switch (choice){
+        case 1:
+            cout << "Result = " << addition(a, b) << endl;
+            break;
+
         case 2:
             cout << "Result = " << subtract(a, b) << endl;
+            break;
+
+        case 3:
+            cout << "Result = " << multiplication(a, b) << endl;
             break;
 
         case 4:
             cout << "Result = " << divide(a, b) << endl;
             break;
-	// add case 1 and case 3 and then remove this comment and change default because i have written that so that i know that has been not implemented, when u finish msg me after pushing, and then we will send it to that bhaiya.
+        
         default:
             cout << "That operation is not implemented by you yet." << endl;
+            break;
     }
 
     return 0;
