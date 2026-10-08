@@ -1,0 +1,205 @@
+#include <iostream>
+using namespace std;
+
+const int SIZE = 20;
+
+bool isValid(int row, int col)
+{
+    return row >= 0 && row < SIZE &&
+           col >= 0 && col < SIZE;
+}
+
+void printGrid(char grid[SIZE][SIZE])
+{
+    cout << "    ";
+
+    for (int col = 0; col < SIZE; col++)
+        cout << col << " ";
+
+    cout << "\n";
+
+    cout << "    ";
+    for (int col = 0; col < SIZE; col++)
+        cout << "--";
+
+    cout << "\n";
+
+    for (int row = 0; row < SIZE; row++)
+    {
+        cout << row << " | ";
+
+        for (int col = 0; col < SIZE; col++)
+            cout << grid[row][col] << " ";
+
+        cout << "\n";
+    }
+}
+
+int main()
+{
+    char grid[SIZE][SIZE];
+
+    // Create empty grid
+    for (int row = 0; row < SIZE; row++)
+    {
+        for (int col = 0; col < SIZE; col++)
+        {
+            grid[row][col] = '.';
+        }
+    }
+
+    // Fixed obstacles
+    grid[2][5] = '#';
+    grid[3][5] = '#';
+    grid[4][5] = '#';
+    grid[5][5] = '#';
+    grid[4][8] = '#';
+    grid[3][8] = '#';
+    grid[2][8] = '#';
+    grid[2][6] = '#';
+    grid[2][7] = '#';
+
+    grid[5][6] = '#';
+    grid[5][7] = '#';
+    grid[5][8] = '#';
+
+    grid[8][10] = '#';
+    grid[9][10] = '#';
+    grid[10][10] = '#';
+    grid[11][10] = '#';
+
+    grid[11][11] = '#';
+    grid[11][12] = '#';
+    grid[11][13] = '#';
+
+    grid[19][19] = '#';
+
+    cout << "\n20 x 20 Grid\n";
+    cout << "'.' = Empty    '#' = Obstacle\n\n";
+
+    printGrid(grid);
+
+    int startRow, startCol;
+    int endRow, endCol;
+
+    cout << "\nEnter START coordinates (row column): ";
+    cin >> startRow >> startCol;
+
+    cout << "Enter END coordinates (row column): ";
+    cin >> endRow >> endCol;
+
+    if (!isValid(startRow, startCol) ||
+        !isValid(endRow, endCol))
+    {
+        cout << "Invalid coordinates!\n";
+        return 0;
+    }
+
+    if (grid[startRow][startCol] == '#' ||
+        grid[endRow][endCol] == '#')
+    {
+        cout << "Start or End cannot be an obstacle!\n";
+        return 0;
+    }
+
+    int row = startRow;
+    int col = startCol;
+
+    grid[row][col] = 'S';
+
+    
+
+
+    int steps = 0;
+    int maxSteps = SIZE * SIZE * 4;
+
+    while ((row != endRow || col != endCol) &&
+           steps < maxSteps)
+    {
+        bool moved = false;
+
+        
+        if (row < endRow &&
+            isValid(row + 1, col) &&
+            grid[row + 1][col] != '#')
+        {
+            row++;
+            moved = true;
+        }
+        else if (row > endRow &&
+                 isValid(row - 1, col) &&
+                 grid[row - 1][col] != '#')
+        {
+            row--;
+            moved = true;
+        }
+
+        if (!moved)
+        {
+            if (col < endCol &&
+                isValid(row, col + 1) &&
+                grid[row][col + 1] != '#')
+            {
+                col++;
+                moved = true;
+            }
+            else if (col > endCol &&
+                     isValid(row, col - 1) &&
+                     grid[row][col - 1] != '#')
+            {
+                col--;
+                moved = true;
+            }
+        }
+
+        // If still blocked, try the opposite direction
+        if (!moved)
+        {
+            if (col < SIZE - 1 &&
+                grid[row][col + 1] != '#')
+            {
+                col++;
+                moved = true;
+            }
+            else if (col > 0 &&
+                     grid[row][col - 1] != '#')
+            {
+                col--;
+                moved = true;
+            }
+        }
+
+        // If completely blocked
+        if (!moved)
+        {
+            cout << "\nNo path found!\n";
+            return 0;
+        }
+
+        // Mark path
+        if (row != endRow || col != endCol)
+            grid[row][col] = '*';
+
+        steps++;
+    }
+
+    if (row == endRow && col == endCol)
+    {
+        grid[endRow][endCol] = 'E';
+
+        cout << "\nPath found!\n";
+        cout << "Number of steps: " << steps << "\n";
+    }
+    else{
+        cout << "No path found";
+    }
+
+
+    cout << "\nFinal Grid\n";
+    cout << "'.' = Empty   '#' = Obstacle   '*' = Path\n";
+    cout << "'S' = Start   'E' = End\n\n";
+
+    printGrid(grid);
+
+    return 0;
+}
